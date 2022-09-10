@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+
+    <h1 id="mytitle">My first PHP page</h1>
+
+    <form>
+
+      <label>
+        Post Name : <input type="text" name="MyName">
+      </label>
+      <button type="button" name="MyButton1" onclick="TestSendRequest(this.form)">Click Me</button>
+
+      <label>
+        Get Name : <input type="text" name="MyName">
+      </label>
+      <button type="button" name="MyButton2" onclick="getRequest()">Click Me</button>
+    </form>
+    
+    <script type = "text/javascript">
+
+      function TestSendRequest (theform) {
+        console.log("Testing Test Function ", theform.MyName.value );
+        sendRequest();
+      }
+
+      function sendRequest () {
+        var apiReq = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+          if (request.readyState == 4) {
+            my_callback(request)
+            }
+        }
+        reqType = "teacher"
+        post(apiReq, reqType, "")
+      }
+
+      function getRequest () {
+
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+          if (request.readyState == 4) {
+            my_callback(request)
+          }
+        }
+        reqType = "teacher"
+        get(apiReq, reqType)
+      }
+
+      function my_callback(request) {
+        if (request.status == 200) {
+          alert(request.responseText);
+        }
+      }
+
+      function post (apiReq, reqType, data) {
+        apiReq.open("POST", "server.php/" . reqType . "/" . data, true).send();
+      }
+
+      function get(apiReq, reqType) {
+        apiReq.open("GET", "server.php/" . reqType . "/". data, true).send();
+      }
+    </script>
+  
+
+  <body>
+</html>

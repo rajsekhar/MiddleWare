@@ -1,0 +1,16 @@
+{
+    "instructor": {
+        "saftyMeasure": "object"
+    },
+    "student": {
+        "saftyMeasure": "object"
+    },
+
+    "saftyMeasure": {
+        "faceSheild":"bool",
+        "faceMask": "bool",
+        "lysol": "bool",
+        "desk":"bool",
+        "handSanitizer": "bool"
+    }
+}
