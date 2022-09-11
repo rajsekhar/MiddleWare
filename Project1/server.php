@@ -1,48 +1,45 @@
-<<?php
+<?php
 
+header("Content-Type: application/json; charset=UTF-8");
 
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-$uri = explode( '/', $uri );
+$instructor = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  // The request is using the POST method
-  if ($uri[2] == "teacher") {
-    echo "Teacher";
-  } else if ($uri[2] == "student") {
-    echo "Student";
-  } else {
-    echo "invalid POST request";
-  }
 
+  $obj = json_decode($_POST["json"], false);
+  // print_r($obj);
+
+  if ( ($obj->type == 'Instructor') || strstr($obj->type, 'Student')) {
+    $jsonObj = $obj;
+    sleep (5);
+    if ($jsonObj->faceSheild == false || $jsonObj->faceMask == false || 
+    $jsonObj->lysol == false ||  $jsonObj->desk == false || 
+    $jsonObj->handSanitizer == false) {
+      echo "$obj->type is not following COVID-19 precautions";
+    } else{
+      echo "$obj->type thanks for following COVID-19 precautions";
+    }
+  } else {
+    echo "Invalid Requset";
+  }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-  // The request is using the POST method
-  if ($uri[2] == "teacher") {
-    echo "Teacher";
-  } else if ($uri[2] == "student") {
-    echo "Student";
+
+  $obj = json_decode($_GET["json"], false);
+  // print_r($obj);
+
+  if ( ($obj->type == 'Instructor') || strstr($obj->type, 'Student')) {
+    $jsonObj = $obj;
+    sleep (5);
+    if ($jsonObj->faceSheild == false || $jsonObj->faceMask == false || 
+    $jsonObj->lysol == false ||  $jsonObj->desk == false || 
+    $jsonObj->handSanitizer == false) {
+      echo "$obj->type is not following COVID-19 precautions";
+    } else{
+      echo "$obj->type thanks for following COVID-19 precautions";
+    }
   } else {
-    echo "invalid GET request";
+    echo "Invalid Requset";
   }
 }
-
-// if (isset($_GET['teacher']) && $_GET['teacher']!="") {
-//   $response = "POST 1 Teacher";
-//   $json_response = json_encode($response);
-// 	echo $json_response;
-// }
-
-// if (isset($_POST['student']) && $_POST['student']!="") {
-//   $response = "POST 2 Teacher";
-//   $json_response = json_encode($response);
-// 	echo $json_response;
-// }
-
-// if (isset($_POST['teacher']) && $_POST['teacher']!="") {
-//   $response = "POST 3 Teacher";
-//   $json_response = json_encode($response);
-// 	echo $json_response;
-// }
-
-?>

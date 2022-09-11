@@ -1,67 +1,141 @@
 <!DOCTYPE HTML>
 <html>
-  <body>
 
-    <h1 id="mytitle">My first PHP page</h1>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAH COVID-19 Monitoring System</title>
+    
+    <link rel="icon" type="image/x-icon" href="https://www.uah.edu/templates/uah/favicon.ico">
+    <style>
+      table, tr, td {
+        border: 2px black solid;
+        border-collapse: collapse;
+      }
+      table {
+        width: 100%;
+      }
+      td {
+        width: 20%;
+      }
+    </style>
+    
+    <!-- <script src="js.js"></script> -->
+  </head>
+
+  <body>
+ 
+    <table>
+      <tr>
+        <td>Room Entrance: <br>Hand Sanitizer Station</td>
+        <td rowspan="3">Aisleway</td>
+        <td>Instructor Rectangle <br>DESK & Lysol</td>
+        <td colspan="2">Student Question Rectangle</td>
+      </tr>
+      <tr>
+        <td>Student Rectangle #1 <br>DESK & Lysol</td>
+        <td>Student Rectangle #2 <br>DESK & Lysol</td>
+        <td rowspan="2">Aisleway</td>
+        <td>Student Rectangle #3 <br>DESK & Lysol</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>Student Rectangle #5 <br>DESK & Lysol</td>
+        <td>Student Rectangle #4 <br>DESK & Lysol</td>
+      </tr>
+      <tr>
+        <td colspan="5">Aisleway</td>
+      </tr>
+    </table>
 
     <form>
+      <fieldset>
+        <legend>Class Room</legend>
+        <form>
+        <label for="rectangle">Select :</label>
+        <select name="rectangle" id="rectangle">
+          <option value="select" disabled selected>-- Please Select A Rectangle --</option>
+          <option value="Instructor">Instructor</option>
+          <option value="Student #1">Student #1</option>
+          <option value="Student #2">Student #2</option>
+          <option value="Student #3">Student #3</option>
+          <option value="Student #4">Student #4</option>
+          <option value="Student #5">Student #5</option>
+        </select><br><br>
 
-      <label>
-        Post Name : <input type="text" name="MyName">
-      </label>
-      <button type="button" name="MyButton1" onclick="TestSendRequest(this.form)">Click Me</button>
+        <label for="note">Note: Selcet the following status</label><br><br>
 
-      <label>
-        Get Name : <input type="text" name="MyName">
-      </label>
-      <button type="button" name="MyButton2" onclick="getRequest()">Click Me</button>
+        <input type="checkbox" id="desk">
+        <label for="Desk">Desk Status</label><br><br>
+        
+        <input type="checkbox" id="lysol">
+        <label>Lysol Status</label><br><br>
+
+        <input type="checkbox" id="sanitizer">
+        <label>Hand-Sanitizer Status</label><br><br>
+        
+        <input type="checkbox" id="faceMask">
+        <label for="Face Mask">Face Mask Status</label><br><br>
+
+        <input type="checkbox" id="faceSheild">
+        <label for="Face Shield">Face Shield Status</label><br><br>
+        
+        <button type="button" onclick="sendRequest(this.form)">Submit</button>
+      </form>
+        
+      </fieldset>
     </form>
-    
-    <script type = "text/javascript">
 
-      function TestSendRequest (theform) {
-        console.log("Testing Test Function ", theform.MyName.value );
-        sendRequest();
-      }
 
-      function sendRequest () {
-        var apiReq = new XMLHttpRequest();
-        request.onreadystatechange = function () {
-          if (request.readyState == 4) {
-            my_callback(request)
-            }
+    <script>
+        // const jsonData = {
+        //     type: "instructor",
+        //     faceSheild: true,
+        //     faceMask: true,
+        //     lysol: false,
+        //     desk: true,
+        //     handSanitizer: true
+        // };
+
+        function sendRequest (thisform) {
+          const jsonData = {
+              type: thisform.rectangle.value,
+              lysol: thisform.lysol.checked,
+              faceSheild: thisform.faceSheild.checked,
+              faceMask: thisform.faceMask.checked,
+              handSanitizer: thisform.sanitizer.checked,
+              desk: thisform.desk.checked
+          };
+          restAPI("GET", jsonData)
         }
-        reqType = "teacher"
-        post(apiReq, reqType, "")
-      }
 
-      function getRequest () {
+        function restAPI (reqType, myJson) {
 
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = function () {
-          if (request.readyState == 4) {
-            my_callback(request)
+          var myTab = document.getElementById('student1');
+          console.log(myTab);
+          var apiReq = new XMLHttpRequest();
+            
+            apiReq.onreadystatechange = function () {
+              if (apiReq.readyState == 4) {
+                // console.log(apiReq.responseText)
+                my_callback(apiReq)
+              }
+            }
+        
+            apiReq.open(reqType, "server.php", true)
+            apiReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            jsonObj = JSON.stringify(myJson);
+            console.log(jsonObj);
+            apiReq.send("json=" + jsonObj);
+        }
+
+        function my_callback(apiReq) {
+          if (apiReq.status == 200) {
+            console.log(apiReq.responseText)
+            alert(apiReq.responseText);
           }
         }
-        reqType = "teacher"
-        get(apiReq, reqType)
-      }
-
-      function my_callback(request) {
-        if (request.status == 200) {
-          alert(request.responseText);
-        }
-      }
-
-      function post (apiReq, reqType, data) {
-        apiReq.open("POST", "server.php/" . reqType . "/" . data, true).send();
-      }
-
-      function get(apiReq, reqType) {
-        apiReq.open("GET", "server.php/" . reqType . "/". data, true).send();
-      }
     </script>
-  
 
-  <body>
-</html>
+  </body>
+  </html>
