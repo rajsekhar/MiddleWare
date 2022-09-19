@@ -24,6 +24,7 @@ RUN apt-get install -y php-mbstring
 RUN apt-get install -y php-mysql
 RUN apt-get install -y php-zip
 
+
 # install network commands (ip and ifconfig)
 RUN apt-get install -y iproute2
 RUN apt-get install -y net-tools
@@ -31,9 +32,14 @@ RUN apt-get install -y net-tools
 # install file converter from Windows to Linux
 RUN apt-get install -y dos2unix
 RUN apt-get clean
+RUN mkdir -p /project
+WORKDIR /project
+COPY db.php /project/
+COPY create_table.php /project/
+RUN php db.php
 
-#COPY index.html /var/www/html
-#COPY server.php /var/www/html
+# COPY index.html /var/www/html/
+# COPY server.php /var/www/html/
 
 EXPOSE 80
 CMD ["apache2ctl","-D","FOREGROUND"]

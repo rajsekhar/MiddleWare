@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html>
-<body>
-
 <?php
-ECHO "Hello World!<br>";
-echo "Hello World!<br>";
-EcHo "Hello World!<br>";
-?> 
+$jsonobj = '{ "instructor": { "faceSheild":"true", "faceMask": "true", "lysol": "true", "desk":"true", "handSanitizer": "true"}}';
+$logdata = json_decode($jsonobj, true);
+// syslog(1, $logdata);
 
-</body>
-</html>
+print_r($logdata);
+
+?> 
