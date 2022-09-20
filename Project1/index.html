@@ -7,13 +7,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="https://www.uah.edu/templates/uah/favicon.ico">
     <link href="style.css" rel="stylesheet" type="text/css" />
     <script src="simulation.js" type="text/javascript" defer></script>
     <title>Tabs</title>
 
 </head>
 <body>
-    
+
+    <h1 style="text-align: center;">Monitoring COVID Requirements</h1>
+
+    <section onchange=""></section>
   <div class="mytabs" >
     <input type="radio" id="tabclass_one" name="mytabs" checked="checked">
     <label for="tabclass_one">Class 1</label>
@@ -58,62 +62,3 @@
     }
 
 </script> 
-
-<style>
-table,
-tr,
-td {
-    border: 2px black solid;
-    border-collapse: collapse;
-}
-
-        table {
-            width: 100%;
-        }
-
-        td {
-            width: 20%;
-        }
-        
-        #student2,#student3,#student4,#student5 {
-            display: none; 
-        }
-
-  body {
-    background: #ccc;
-    font-family: 'Roboto', sans-serif;
-}
-.mytabs {
-    display: flex;
-    flex-wrap: wrap;
- 
-    padding: 25px;
-}
-.mytabs input[type="radio"] {
-    display: none;
-}
-.mytabs label {
-    padding: 20px;
-    /* background: #e2e2e2; */
-    font-weight: bold;
-}
-.mytabs .tab {
-    width: 100%;
-    padding: 20px;
-    background: #fff;
-    order: 1;
-    display: none;
-}
-.mytabs .tab h2 {
-    font-size: 3em;
-}
-
-.mytabs input[type='radio']:checked + label + .tab {
-    display: block;
-}
-
-.mytabs input[type="radio"]:checked + label {
-    background: #fff;
-}
-
-</style>

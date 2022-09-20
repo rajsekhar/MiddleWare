@@ -9,7 +9,7 @@ $instructor = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $obj = json_decode($_POST["json"], false);
-  // print_r($obj);
+  print_r($obj);
 
   if ( ($obj->type == 'Instructor') || strstr($obj->type, 'Student')) {
     $jsonObj = $obj;                                                                                                                                                                                                                                                                             
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   $obj = json_decode($_GET["json"], false);
   // print_r($obj);
 
-  $conn = mysqli_connect("172.17.0.3", "root", "root@123", "covid");
+  $conn = mysqli_connect("172.17.0.2", "root", "root@123", "covid");
   $getCount = "select count(*) from covidreport where class=$obj->class and person='$obj->type'";
 
   $count  = 0;
@@ -46,9 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   $data = '{"status":false, "msg":"SD Sensor alert"}';
   $json = json_encode($data);
   
-  if ( ($obj->type == 'Instructor') && $count > 1) {
+  if ( ($obj->type == 'Instructor') && $count > 0) {
     $json = '{"status":true, "msg":"SD Sensor alert"}';
-  } else if ( ($obj->type == 'Student') && $count > 5) {
+  } else if ( ($obj->type == 'Student') && $count > 4) {
     $json = '{"status":true, "msg":"SD Sensor alert"}';
   } else {
     $json = '{"status":false, "msg":""}';

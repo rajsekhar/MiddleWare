@@ -1,8 +1,8 @@
 <?php
-$conn = mysqli_connect("172.17.0.3", "root", "root@123", "covid");
+$conn = mysqli_connect("172.17.0.2", "root", "root@123", "covid");
  
 // Attempt insert query execution
-$sql = "INSERT INTO covidreport (class, person, facemask, faceshield, hsstatus, lysol, deskstatus) VALUES (1, 'Instructor', true, true, true, true, true)";
+$sql = "INSERT INTO covidreport (class, person, id, facemask, faceshield, hsstatus, lysol, deskstatus) VALUES (1, 'Instructor', 1, true, true, true, true, true)";
 // $sql = "select count(*) from covidreport where class=1 and person='student'";
 if(mysqli_query($conn, $sql)){
 

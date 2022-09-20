@@ -1,7 +1,7 @@
 <?php
 /* Attempt MySQL server connection. Assuming you are running MySQL
 server with default setting (user 'root' with no password) */
-$conn = mysqli_connect("172.17.0.3", "root", "root@123");
+$conn = mysqli_connect("172.17.0.2", "root", "root@123");
  
 // Check connection
 if($conn === false){

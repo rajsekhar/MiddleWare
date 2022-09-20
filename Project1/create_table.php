@@ -1,7 +1,7 @@
 <?php
 /* Attempt MySQL server connection. Assuming you are running MySQL
 server with default setting (user 'root' with no password) */
-$conn = mysqli_connect("172.17.0.3", "root", "root@123", "covid");
+$conn = mysqli_connect("172.17.0.2", "root", "root@123", "covid");
  
 // Check connection
 if($conn === false){
@@ -13,7 +13,7 @@ echo 'Connected successfully';
 $sql = "CREATE TABLE covidreport (
     class INT,
     person VARCHAR(30) NOT NULL,
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    id INT,
     facemask BOOLEAN,
     faceshield BOOLEAN,
     hsstatus BOOLEAN,

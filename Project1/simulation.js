@@ -7,7 +7,7 @@ class Simulation extends HTMLElement {
 
       connectedCallback() {
         this.innerHTML = `
-        <fieldset>
+        
         <table id="infotable">
         <tr>
                 <td>&nbsp;Room Entrance: <br>&nbsp;Hand Sanitizer Station</td>
@@ -31,14 +31,19 @@ class Simulation extends HTMLElement {
             </tr>
         </table>
 
+        <fieldset id="options">
             <br>
             <label for="selectiontype" id="mylabel">Select Type</label>
 
-            <select name="selecttype" id="selecttype" style="border: 6px solid transparent;font-weight: bold;">
+            <select name="selecttype" id="selecttype" style="border: 6px solid transparent;font-weight: bold;" onchange="selectChange(this.form)">
 
                 <option value="" disabled selected>-- Please Select A Rectangle --</option>
-                <option value="Instructor">Instructor</option>
-                <option value="Student">Student</option>
+                <option value="Instructor" selected>Instructor</option>
+                <option value="Student#1">Student #1</option>
+                <option value="Student#2">Student #2</option>
+                <option value="Student#3">Student #3</option>
+                <option value="Student#4">Student #4</option>
+                <option value="Student#5">Student #5</option>
 
             </select>
 
@@ -96,12 +101,18 @@ class Simulation extends HTMLElement {
                     <tr></tr>
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    <button type="button" id="checkin" onclick="checkIn(this.form)" class="mybutton">Check In</button>
                     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <button type="button" id="checkin" onclick="checkIn(this.form)" style="border: 6px solid transparent;font-weight: bold;">Check In</button>
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    <button type="button" id="checkout" onclick="checkOut(this.form)" style="border: 6px solid transparent;font-weight: bold;">Check Out</button>
+                    <button type="button" id="checkout" onclick="checkOut(this.form)" class="mybutton">Check Out</button>
                     
             <br><br>
+        </fieldset>
+        <fieldset style="text-align: center;">
+        <br>
+        <button type="button" class="button" id="StartClass" onclick="startClass(this.form)" >Start Class</button>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <button type="button" class="button"  id="EndClass" onclick="endClass(this.form)" >End Class</button>
+        <br><br>
         </fieldset>
         `
       }
@@ -109,9 +120,47 @@ class Simulation extends HTMLElement {
 
 customElements.define('simulation-component', Simulation);
 
+var class_one_stu_cnt = 0;
+var class_two_stu_cnt = 0;
+var class_three_stu_cnt = 0;
+var stuId = 0
+function selectChange(form) {
+    stuId = 0
+    if(form.selecttype.value == "Student#1") {
+        stuId = 1
+    }
+    if(form.selecttype.value == "Student#2") {
+        stuId = 2
+    }
+    if(form.selecttype.value == "Student#3") {
+        stuId = 3
+    }
+    if(form.selecttype.value == "Student#4") {
+        stuId = 4
+    }
+    if(form.selecttype.value == "Student#5") {
+        stuId = 5
+    }
+    console.log(stuId)
+}
+
+function startClass (form) {
+    form.options.disabled  = true
+}
+
+function endClass (form) {
+    form.options.disabled  = false
+}
+
 function checkIn (form) {
+    var classId = 0;
+    classId = form.id == "one" ? 1 : (form.id == "two" ? 2 : (form.id == "three" ? 3:0))
+    if (form.id == "one") {
+
+    }
     var jsonData = {
-        class: 0,
+        class: classId,
+        id: stuId,
         type: "", faceMask: false, faceSheild: false,
         lysol: false, handSanitizer: false, desk: false
     };
@@ -121,35 +170,113 @@ function checkIn (form) {
         return
     }
     
+    // check boxes select 
+    if ( (form.facemaskused.checked == false && form.facemasknotused.checked == false) || 
+        (form.faceshieldused.checked == false  && form.faceshieldnotused.checked == false) || 
+        (form.lysolpickup.checked == false && form.lysolputdown.checked == false)|| 
+        (form.hsused.checked == false && form.hsnotused.checked == false) ||
+        (form.deskcleaned.checked  == false && form.desknotcleaned.checked  == false) ) {
+
+        alert("please select all checkboxes");
+        return
+    }
+
+    if (form.hsused.checked == false) {
+        jsonData = {
+            class: classId,
+            type: form.selecttype.value, 
+            id:stuId,
+            handSanitizer: form.hsused.checked == false ? 0:true
+
+        };
+
+        handSanitizer (jsonData)
+        return
+    }
+
+    if (form.facemaskused.checked == false || form.faceshieldused.checked == false) {
+        jsonData = {
+            class: classId,
+            type: form.selecttype.value, 
+            id:stuId,
+            faceMask: form.facemaskused.checked == false ? 0:true,
+            faceSheild: form.faceshieldused.checked == false ? 0:true
+        };
+
+        masksensor (jsonData)
+        return
+    }
+
+    if (form.deskcleaned.checked == false) {
+        jsonData = {
+            class: classId,
+            type: form.selecttype.value, 
+            id:stuId,
+            desk: form.deskcleaned.checked == false ? 0:true
+
+        };
+
+        deskSanitize (jsonData)
+        return
+    }
+
+    if (form.lysolputdown.checked == false) {
+        jsonData = {
+            class: classId,
+            type: form.selecttype.value, 
+            id:stuId,
+            lysol: form.lysolputdown.checked == false ? 0:true
+
+        };
+
+        lysolSensor (jsonData)
+        return
+    }
+
     if (form.id == "one") {
         console.log(form.id)
         jsonData = {
-            class: 1,
-            type: form.selecttype.value, faceMask: form.facemaskused.checked, faceSheild: form.faceshieldused.checked,
-            lysol: form.lysolpickup.checked, handSanitizer: form.hsused.checked, desk: form.deskcleaned.checked
+            class: classId,
+            type: form.selecttype.value, 
+            id:stuId,
+            faceMask: form.facemaskused.checked == false ? 0:true,
+            faceSheild: form.faceshieldused.checked == false ? 0:true,
+            lysol: form.lysolpickup.checked == false ? 0:true,
+            handSanitizer: form.hsused.checked == false ? 0:true,
+            desk: form.deskcleaned.checked == false ? 0:true
+
         };
-        console.log(jsonData)
         getRequest (jsonData)
     }
 
     if (form.id == "two") {
         console.log(form.id)
         jsonData = {
-            class: 2,
-            type: form.selecttype.value, faceMask: form.facemaskused.checked, faceSheild: form.faceshieldused.checked,
-            lysol: form.lysolpickup.checked, handSanitizer: form.hsused.checked, desk: form.deskcleaned.checked
+            class: classId,
+            type: form.selecttype.value, 
+            id:stuId,
+            faceMask: form.facemaskused.checked == false ? 0:true,
+            faceSheild: form.faceshieldused.checked == false ? 0:true,
+            lysol: form.lysolpickup.checked == false ? 0:true,
+            handSanitizer: form.hsused.checked == false ? 0:true,
+            desk: form.deskcleaned.checked == false ? 0:true
         };
         console.log(jsonData)
+        getRequest (jsonData)
     }
 
     if (form.id == "three") {
         jsonData = {
-            class: 3,
-            type: form.selecttype.value, faceMask: form.facemaskused.checked, faceSheild: form.faceshieldused.checked,
-            lysol: form.lysolpickup.checked, handSanitizer: form.hsused.checked, desk: form.deskcleaned.checked
+            class: classId,
+            type: form.selecttype.value,
+            id:stuId,
+            faceMask: form.facemaskused.checked == false ? 0:true,
+            faceSheild: form.faceshieldused.checked == false ? 0:true,
+            lysol: form.lysolpickup.checked == false ? 0:true,
+            handSanitizer: form.hsused.checked == false ? 0:true,
+            desk: form.deskcleaned.checked == false ? 0:true
         };
-        console.log(form.id)
-        console.log(jsonData)
+        getRequest (jsonData)
     }
 }
 
@@ -157,7 +284,79 @@ function checkOut () {
     console.log("checkOut Button Click")
 }
 
+// lysol Function
+function lysolSensor (myJson) {
+    var apiReq = new XMLHttpRequest();
+    apiReq.onreadystatechange = function () {
+        if (apiReq.readyState == 4) {
+            console.log(apiReq.responseText)
+            var resJson = JSON.parse(apiReq.responseText);
+            if (resJson.status === true) {
+                my_callback(apiReq, resJson.type + " : " + resJson.msg)
+            }
+        }
+    }
+    jsonObj = JSON.stringify(myJson);
+    apiReq.open("GET", "lysolsensor.php?lysolsensor=" + jsonObj, true)
+    apiReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    apiReq.send();
+}
 
+// Hand Sanitizer Function
+function handSanitizer (myJson) {
+    var apiReq = new XMLHttpRequest();
+    apiReq.onreadystatechange = function () {
+        if (apiReq.readyState == 4) {
+            console.log(apiReq.responseText)
+            var resJson = JSON.parse(apiReq.responseText);
+            if (resJson.status === true) {
+                my_callback(apiReq, resJson.type + " : " + resJson.msg)
+            }
+        }
+    }
+    jsonObj = JSON.stringify(myJson);
+    apiReq.open("GET", "hssensor.php?hssensor=" + jsonObj, true)
+    apiReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    apiReq.send();
+}
+
+// desk Sanitize Function
+function deskSanitize (myJson) {
+    var apiReq = new XMLHttpRequest();
+    apiReq.onreadystatechange = function () {
+        if (apiReq.readyState == 4) {
+            console.log(apiReq.responseText)
+            var resJson = JSON.parse(apiReq.responseText);
+            if (resJson.status === true) {
+                my_callback(apiReq, resJson.type + "  " + resJson.msg)
+            }
+        }
+    }
+    jsonObj = JSON.stringify(myJson);
+    apiReq.open("GET", "desksanitize.php?desksanitize=" + jsonObj, true)
+    apiReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    apiReq.send();
+}
+
+// face mask Function
+function masksensor (myJson) {
+    var apiReq = new XMLHttpRequest();
+    apiReq.onreadystatechange = function () {
+        if (apiReq.readyState == 4) {
+            console.log(apiReq.responseText)
+            var resJson = JSON.parse(apiReq.responseText);
+            if (resJson.status === true) {
+                my_callback(apiReq, resJson.type + " : " + resJson.msg)
+            }
+        }
+    }
+    jsonObj = JSON.stringify(myJson);
+    apiReq.open("GET", "masksensor.php?masksensor=" + jsonObj, true)
+    apiReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    apiReq.send();
+}
+          
+// Get Request
 function getRequest (myJson) {
 
     var apiReq = new XMLHttpRequest();
@@ -166,10 +365,10 @@ function getRequest (myJson) {
         if (apiReq.readyState == 4) {
         
          var resJson = JSON.parse(apiReq.responseText);
-         if (resJson.status = true) {
+         if (resJson.status === true) {
              my_callback(apiReq, resJson.msg)
          } else {
-            postData(jsonData)
+            postData(myJson)
          }
         }
       }
@@ -178,8 +377,9 @@ function getRequest (myJson) {
       apiReq.open("GET", "sdsensor.php?json=" + jsonObj, true)
       apiReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       apiReq.send();
-  }
+}
 
+// Post Request
 function postData (myJson) {
 
     var apiReq = new XMLHttpRequest();
@@ -191,7 +391,7 @@ function postData (myJson) {
       }
     }
 
-    apiReq.open("POST", "server.php", true);
+    apiReq.open("POST", "server.php?", true);
     apiReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     jsonObj = JSON.stringify(myJson);
     console.log(jsonObj);
