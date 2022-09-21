@@ -1,0 +1,31 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    hostname: mysql
+    user: root
+    environment:
+      MYSQL_ROOT_PASSWORD: root@123
+    labels:
+      dockerName: mysql
+    ports:
+      - 8060:3306
+    networks:
+      default:
+        aliases:
+          - mysql
+
+  webserver:
+    image: webserver:latest
+    restart: always
+    hostname: webserver
+    user: root
+    labels:
+      dockerName: webserver
+    ports:
+      - 8050:80
+    networks:
+      default:
+        aliases:
+          - webserver

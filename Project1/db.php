@@ -19,33 +19,5 @@ if(! $retval ) {
       return;
 }
 
-
-// $sql = "CREATE TABLE covidreport (
-//     class INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-//     person VARCHAR(30) NOT NULL,
-//     facemask BOOLEAN,
-//     faceshield BOOLEAN,
-//     hsstatus BOOLEAN,
-//     lysol BOOLEAN,
-//     deskstatus BOOLEAN
-// )";
-
-// if(mysqli_query($conn, $sql)){
-//     echo "Table created successfully.";
-// } else{
-//     echo "ERROR: Could not able to execute $sql. " . mysqli_error($conn);
-// }
- 
-// Attempt insert query execution
-// $sql = "INSERT INTO covidreport (class, person, facemask, faceshield, hsstatus, lysol, deskstatus) VALUES (1, 'student #1', true, false, true, true, true)";
-// if(mysqli_query($conn, $sql)){
-//     echo "Records inserted successfully.";
-// } else{
-//     echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
-// }
-
-
-// Print host information
-// echo "Connect Successfully. Host info: " . mysqli_get_host_info($conn);
 mysqli_close($conn);
 ?>

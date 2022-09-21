@@ -34,9 +34,9 @@ RUN apt-get install -y dos2unix
 RUN apt-get clean
 RUN mkdir -p /project
 WORKDIR /project
-COPY db.php /project/
-COPY create_table.php /project/
-RUN php db.php
+COPY *.* /project/
+#COPY create_table.php /project/
+#RUN php db.php
 
 # COPY index.html /var/www/html/
 # COPY server.php /var/www/html/

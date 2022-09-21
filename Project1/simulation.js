@@ -37,8 +37,8 @@ class Simulation extends HTMLElement {
 
             <select name="selecttype" id="selecttype" style="border: 6px solid transparent;font-weight: bold;" onchange="selectChange(this.form)">
 
-                <option value="" disabled selected>-- Please Select A Rectangle --</option>
-                <option value="Instructor" selected>Instructor</option>
+                <option value="" disabled selected>-- Please Select --</option>
+                <option value="Instructor">Instructor</option>
                 <option value="Student#1">Student #1</option>
                 <option value="Student#2">Student #2</option>
                 <option value="Student#3">Student #3</option>
@@ -47,7 +47,33 @@ class Simulation extends HTMLElement {
 
             </select>
 
+            &nbsp; &nbsp;&nbsp;&nbsp;
+            <select name="selectRecttype" id="selectrect" style="border: 6px solid transparent;font-weight: bold;" onchange="selectRectChange(this.form)">
+
+            <option value="" disabled selected>-- Please Select A Rectangle --</option>
+            <option value="InstructorRect">Instructor Rectangle</option>
+            <option value="Rectangle#1">Rectangle #1</option>
+            <option value="Rectangle#2">Rectangle #2</option>
+            <option value="Rectangle#3">Rectangle #3</option>
+            <option value="Rectangle#4">Rectangle #4</option>
+            <option value="Rectangle#5">Rectangle #5</option>
+
+            </select>
+
+
             <br><br>
+
+            <label>Hand-Sanitizer Status</label>
+            
+            <input type="checkbox" id="hsused" onclick="hsusedfun(this.form)"></input>
+            <label for="used">Used</label>
+
+            <input type="checkbox" id="hsnotused" onclick="hsnotusedfun(this.form)"></input>
+            <label for="notused">Not Used</label>
+            
+
+            <br> <br>
+
 
             <label>Face Mask</label>
             
@@ -88,14 +114,14 @@ class Simulation extends HTMLElement {
             <label for="desknotcleaned">Not Cleaned</label>
             <br> <br>
 
-            <label>Hand-Sanitizer Status</label>
-            
-            <input type="checkbox" id="hsused" onclick="hsusedfun(this.form)"></input>
-            <label for="used">Used</label>
+            <div id="quest">
+            <label>Questions</label>
+            <input type="checkbox" id="sqyeschkbx" disabled onclick="hsusedfun(this.form)"></input>
+            <label>Yes</label>
+            </div>
 
-            <input type="checkbox" id="hsnotused" onclick="hsnotusedfun(this.form)"></input>
-            <label for="notused">Not Used</label>
             
+             
             <br><br>
 
                     <tr></tr>
@@ -124,32 +150,76 @@ var class_one_stu_cnt = 0;
 var class_two_stu_cnt = 0;
 var class_three_stu_cnt = 0;
 var stuId = 0
+var selType = "Instructor"
+var endclass = 0
+
+function selectRectChange (form) {
+    if(form.selecttype.value == "Instructor" && form.selectRecttype.value != "InstructorRect") {
+        alert ("Please Select Appropriate Options for Instructor")
+        form.selectRecttype.selectedIndex = 0
+    }
+
+    if (form.selecttype.value.includes("Student") && form.selectRecttype.value == "InstructorRect") {
+        alert ("Please Select Appropriate Options for Student")
+        form.selectRecttype.selectedIndex = 0
+    }
+}
+
 function selectChange(form) {
     stuId = 0
+    
+    if (form.selecttype.value.includes("Student") && form.selectRecttype.value == "InstructorRect") {
+        form.selectRecttype.selectedIndex = 0
+    }
+
     if(form.selecttype.value == "Student#1") {
+        selType = "Student"
         stuId = 1
     }
     if(form.selecttype.value == "Student#2") {
+        selType = "Student"
         stuId = 2
     }
     if(form.selecttype.value == "Student#3") {
+        selType = "Student"
         stuId = 3
     }
     if(form.selecttype.value == "Student#4") {
+        selType = "Student"
         stuId = 4
     }
     if(form.selecttype.value == "Student#5") {
+        selType = "Student"
         stuId = 5
     }
+    if(form.selecttype.value == "Student#6") {
+        selType = "Student"
+        stuId = 6
+    }
+
+    if(form.selecttype.value == "Instructor") {
+
+        form.selectRecttype.selectedIndex = 1
+    }
+
+    if(form.selecttype.value == "Instructor" && form.selectRecttype.value != "InstructorRect") {
+        alert ("Please Select Appropriate Options for Instructor")   
+    }
+    form.sqyeschkbx.disabled = true
     console.log(stuId)
 }
 
 function startClass (form) {
     form.options.disabled  = true
+    form.sqyeschkbx.disabled = true
+    endclass = 1
 }
 
 function endClass (form) {
     form.options.disabled  = false
+    if (endclass) {
+        form.sqyeschkbx.disabled = false
+    }
 }
 
 function checkIn (form) {
@@ -197,7 +267,7 @@ function checkIn (form) {
     if (form.facemaskused.checked == false || form.faceshieldused.checked == false) {
         jsonData = {
             class: classId,
-            type: form.selecttype.value, 
+            type: selType, 
             id:stuId,
             faceMask: form.facemaskused.checked == false ? 0:true,
             faceSheild: form.faceshieldused.checked == false ? 0:true
@@ -210,7 +280,7 @@ function checkIn (form) {
     if (form.deskcleaned.checked == false) {
         jsonData = {
             class: classId,
-            type: form.selecttype.value, 
+            type: selType, 
             id:stuId,
             desk: form.deskcleaned.checked == false ? 0:true
 
@@ -223,7 +293,7 @@ function checkIn (form) {
     if (form.lysolputdown.checked == false) {
         jsonData = {
             class: classId,
-            type: form.selecttype.value, 
+            type: selType, 
             id:stuId,
             lysol: form.lysolputdown.checked == false ? 0:true
 
@@ -237,7 +307,7 @@ function checkIn (form) {
         console.log(form.id)
         jsonData = {
             class: classId,
-            type: form.selecttype.value, 
+            type: selType, 
             id:stuId,
             faceMask: form.facemaskused.checked == false ? 0:true,
             faceSheild: form.faceshieldused.checked == false ? 0:true,
@@ -253,7 +323,7 @@ function checkIn (form) {
         console.log(form.id)
         jsonData = {
             class: classId,
-            type: form.selecttype.value, 
+            type: selType, 
             id:stuId,
             faceMask: form.facemaskused.checked == false ? 0:true,
             faceSheild: form.faceshieldused.checked == false ? 0:true,
@@ -268,7 +338,7 @@ function checkIn (form) {
     if (form.id == "three") {
         jsonData = {
             class: classId,
-            type: form.selecttype.value,
+            type: selType,
             id:stuId,
             faceMask: form.facemaskused.checked == false ? 0:true,
             faceSheild: form.faceshieldused.checked == false ? 0:true,

@@ -42,16 +42,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $count = $row['count(*)'];
     mysqli_free_result($result);
   }
+
+  $getCount = "select count(*) from covidreport where class=$obj->class and person='$obj->type' and id=$obj->id";
+  if($result = mysqli_query($conn, $getCount)){
+    $row = mysqli_fetch_array($result);
+    $count = $row['count(*)'];
+    mysqli_free_result($result);
+
+    if ($count == 1) {
+      echo "Already exists";
+    }
+  }
+
+  #$getCount = "select *from covidreport where class=$obj->class and person='$obj->type' and id=$obj->id";
+
+
   
-  $data = '{"status":false, "msg":"SD Sensor alert"}';
+  $data = '{"status":false, "msg":""}';
   $json = json_encode($data);
   
   if ( ($obj->type == 'Instructor') && $count > 0) {
-    $json = '{"status":true, "msg":"SD Sensor alert"}';
+    $json = '{"status":true, "msg":"Social Distancing Sensor alert"}';
   } else if ( ($obj->type == 'Student') && $count > 4) {
-    $json = '{"status":true, "msg":"SD Sensor alert"}';
-  } else {
-    $json = '{"status":false, "msg":""}';
+    $json = '{"status":true, "msg":"Social Distancing Sensor alert"}';
   }
   echo $json;
 }
