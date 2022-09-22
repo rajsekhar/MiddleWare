@@ -43,15 +43,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     mysqli_free_result($result);
   }
 
-  $getCount = "select count(*) from covidreport where class=$obj->class and person='$obj->type' and id=$obj->id";
+  $getCount = "select count(*) from covidreport where class=$obj->class and person='$obj->type' and id=$obj->id and recid=$obj->recid";
   if($result = mysqli_query($conn, $getCount)){
     $row = mysqli_fetch_array($result);
     $count = $row['count(*)'];
     mysqli_free_result($result);
 
+    $data = '{"status":false, "msg":""}';
+    $json = json_encode($data);
+    
     if ($count == 1) {
-      echo "Already exists";
+      $json = '{"status":true, "msg":"Social Distancing Sensor alert"}';
     }
+    echo $json 
   }
 
   #$getCount = "select *from covidreport where class=$obj->class and person='$obj->type' and id=$obj->id";

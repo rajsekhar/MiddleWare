@@ -14,6 +14,7 @@ $sql = "CREATE TABLE covidreport (
     class INT,
     person VARCHAR(30) NOT NULL,
     id INT,
+    recid INT,
     facemask BOOLEAN,
     faceshield BOOLEAN,
     hsstatus BOOLEAN,

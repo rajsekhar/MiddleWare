@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $conn = mysqli_connect("172.17.0.2", "root", "root@123", "covid");
 
-  $sql = "INSERT INTO covidreport (class, person, id, facemask, faceshield, hsstatus, lysol, deskstatus) VALUES ($obj->class, '$obj->type',$obj->id, $obj->faceMask, $obj->faceSheild, $obj->handSanitizer, $obj->lysol, $obj->desk)";
+  $sql = "INSERT INTO covidreport (class, person, id, recid, facemask, faceshield, hsstatus, lysol, deskstatus) VALUES ($obj->class, '$obj->type',$obj->id, $obj->recid ,$obj->faceMask, $obj->faceSheild, $obj->handSanitizer, $obj->lysol, $obj->desk)";
       
   // Attempt insert query execution
   if(mysqli_query($conn, $sql)){

@@ -153,7 +153,28 @@ var stuId = 0
 var selType = "Instructor"
 var endclass = 0
 
+var rectId = 0
+var stuRect = [];
+
 function selectRectChange (form) {
+
+    if(form.selectRecttype.value == "Rectangle#1") {
+        rectId = 1
+    }
+
+    if(form.selectRecttype.value == "Rectangle#2") {
+        rectId = 2
+    }
+    if(form.selectRecttype.value == "Rectangle#3") {
+        rectId = 3
+    }
+    if(form.selectRecttype.value == "Rectangle#4") {
+        rectId = 4
+    }
+    if(form.selectRecttype.value == "Rectangle#5") {
+        rectId = 5
+    }
+
     if(form.selecttype.value == "Instructor" && form.selectRecttype.value != "InstructorRect") {
         alert ("Please Select Appropriate Options for Instructor")
         form.selectRecttype.selectedIndex = 0
@@ -175,6 +196,8 @@ function selectChange(form) {
     if(form.selecttype.value == "Student#1") {
         selType = "Student"
         stuId = 1
+
+        
     }
     if(form.selecttype.value == "Student#2") {
         selType = "Student"
@@ -191,6 +214,8 @@ function selectChange(form) {
     if(form.selecttype.value == "Student#5") {
         selType = "Student"
         stuId = 5
+        console.log(stuRect[stuId])
+        console.log(stuRect)
     }
     if(form.selecttype.value == "Student#6") {
         selType = "Student"
@@ -231,6 +256,7 @@ function checkIn (form) {
     var jsonData = {
         class: classId,
         id: stuId,
+        recid: rectId,
         type: "", faceMask: false, faceSheild: false,
         lysol: false, handSanitizer: false, desk: false
     };
@@ -303,12 +329,19 @@ function checkIn (form) {
         return
     }
 
+    if (stuRect[rectId] == 1) {
+        alert ("Social Distancing Sensor alert")
+        return
+    }
+
+    stuRect[stuId] = 1
     if (form.id == "one") {
         console.log(form.id)
         jsonData = {
             class: classId,
             type: selType, 
             id:stuId,
+            recid: rectId,
             faceMask: form.facemaskused.checked == false ? 0:true,
             faceSheild: form.faceshieldused.checked == false ? 0:true,
             lysol: form.lysolpickup.checked == false ? 0:true,
@@ -325,6 +358,7 @@ function checkIn (form) {
             class: classId,
             type: selType, 
             id:stuId,
+            recid: rectId,
             faceMask: form.facemaskused.checked == false ? 0:true,
             faceSheild: form.faceshieldused.checked == false ? 0:true,
             lysol: form.lysolpickup.checked == false ? 0:true,
@@ -340,6 +374,7 @@ function checkIn (form) {
             class: classId,
             type: selType,
             id:stuId,
+            recid: rectId,
             faceMask: form.facemaskused.checked == false ? 0:true,
             faceSheild: form.faceshieldused.checked == false ? 0:true,
             lysol: form.lysolpickup.checked == false ? 0:true,
